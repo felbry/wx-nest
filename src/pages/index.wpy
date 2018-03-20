@@ -1,0 +1,26 @@
+<style lang="less">
+
+</style>
+<template>
+  <view class="container">
+    <view wx:for="{{list}}" wx:key="{{index}}">{{item.title}}</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { AV } from '@/storage';
+
+export default class Index extends wepy.page {
+  onLoad() {
+    new AV.Query('Artical').find().then(results => {
+      this.list = results;
+      this.$apply();
+    });
+  }
+
+  data = {
+    list: []
+  };
+}
+</script>
