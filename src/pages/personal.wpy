@@ -1,0 +1,46 @@
+<style lang="less">
+  .personal-container {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+  }
+</style>
+<template>
+  <view class="personal-container">
+    <image
+      style="width: 150px; height: 150px; border-radius: 150px;"
+      mode="aspectFit"
+      src="{{user.avatarUrl}}">
+    </image>
+    <view style="margin-top: 15px;">{{user.nickName}}</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { AV } from '@/storage';
+
+export default class Index extends wepy.page {
+  onLoad () {
+    let that = this;
+    if (!AV.User.current()) {
+      AV.User.loginWithWeapp().then(user => {
+        wx.getUserInfo({
+          success: function (res) {
+            user.set(res.userInfo).save().then(() => {
+              that.user = AV.User.current();
+              that.$apply();          
+            });
+          }
+        });
+      });
+    }
+  }
+
+  data = {
+    user: AV.User.current(),
+  };
+}
+</script>

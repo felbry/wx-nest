@@ -1,10 +1,8 @@
 <style lang="less">
-.container {
+page {
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
   box-sizing: border-box;
 }
 </style>
@@ -16,21 +14,40 @@ import 'wepy-async-function';
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/index'
+      'pages/personal',
+      'pages/account',
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '阿晶和我',
       navigationBarTextStyle: 'black'
+    },
+    debug: true,
+    tabBar: {
+      color: '#515151',
+      selectedColor: '#f4ea2a',
+      backgroundColor: '#fff',
+      list: [
+        {
+          pagePath: 'pages/account',
+          text: 'Account',
+          iconPath: 'imgs/account.png',
+          selectedIconPath: 'imgs/account-active.png'
+        },
+        {
+          pagePath: 'pages/personal',
+          text: 'Personal',
+          iconPath: 'imgs/personal.png',
+          selectedIconPath: 'imgs/personal-active.png'
+        },
+      ]
     }
-  }
+  };
 
-  globalData = {
-    
-  }
+  globalData = {};
 
-  constructor () {
+  constructor() {
     super();
     this.use('requestfix');
     this.use('promisify');

@@ -1,9 +1,24 @@
 <style lang="less">
+  .account-container {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
 
+  .item {
+    margin-bottom: 12px;
+  }
 </style>
 <template>
-  <view class="container">
-    <view wx:for="{{list}}" wx:key="{{index}}">{{item.title}}</view>
+  <view class="account-container">
+    <view
+      class="item"
+      wx:for="{{list}}"
+      wx:key="{{index}}">
+      {{item.title}}
+    </view>
   </view>
 </template>
 
