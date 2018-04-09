@@ -10,6 +10,7 @@ page {
 <script>
 import wepy from 'wepy';
 import 'wepy-async-function';
+import { AV } from '@/storage';
 
 export default class extends wepy.app {
   config = {
@@ -52,10 +53,6 @@ export default class extends wepy.app {
     super();
     this.use('requestfix');
     this.use('promisify');
-  }
-
-  onLaunch() {
-    
   }
 }
 </script>
