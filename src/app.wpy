@@ -15,7 +15,8 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/personal',
-      'pages/account',
+      'pages/personal/account',
+      'pages/bill',
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -30,7 +31,7 @@ export default class extends wepy.app {
       backgroundColor: '#fff',
       list: [
         {
-          pagePath: 'pages/account',
+          pagePath: 'pages/bill',
           text: 'Account',
           iconPath: 'imgs/account.png',
           selectedIconPath: 'imgs/account-active.png'

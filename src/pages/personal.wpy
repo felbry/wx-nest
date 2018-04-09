@@ -6,6 +6,18 @@
     align-items: center;
     height: 100%;
   }
+
+  .operation-panel {
+    display: flex;
+    padding-top: 30px;
+    flex-direction: column;
+    font-size: 18px;
+
+    navigator {
+      padding: 10px 0;
+      border-bottom: 1px solid #333;
+    }
+  }
 </style>
 <template>
   <view class="personal-container">
@@ -15,6 +27,10 @@
       src="{{user.avatarUrl}}">
     </image>
     <view style="margin-top: 15px;">{{user.nickName}}</view>
+    <view class="operation-panel">
+      <navigator url="/pages/personal/account">绑定账号</navigator>
+      <navigator url="/pages/">其他</navigator>
+    </view>
   </view>
 </template>
 
@@ -22,21 +38,19 @@
 import wepy from 'wepy';
 import { AV } from '@/storage';
 
-export default class Index extends wepy.page {
+export default class Personal extends wepy.page {
   onLoad () {
     let that = this;
-    if (!AV.User.current()) {
-      AV.User.loginWithWeapp().then(user => {
-        wx.getUserInfo({
-          success: function (res) {
-            user.set(res.userInfo).save().then(() => {
-              that.user = AV.User.current();
-              that.$apply();          
-            });
-          }
-        });
+    AV.User.loginWithWeapp().then(user => {
+      wx.getUserInfo({
+        success: function (res) {
+          user.set(res.userInfo).save().then(() => {
+            that.user = AV.User.current();
+            that.$apply();
+          });
+        }
       });
-    }
+    });
   }
 
   data = {

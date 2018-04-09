@@ -1,0 +1,125 @@
+<style lang="less">
+  .account-container {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    height: 100%;
+    padding: 30px 50px;
+  }
+
+  .warning-msg {
+    width: 100%;
+    color: red;
+  }
+
+  .section {
+    margin-top: 20px;
+    height: 30px;
+    width: 100%;
+
+    input {
+      height: 100%;
+      border-top: 1px solid #666;
+      border-bottom: 1px solid #666;
+    }
+  }
+
+  .btns {
+    display: flex;
+
+    button {
+      line-height: 30px;
+    }
+  }
+</style>
+<template>
+  <view class="account-container">
+    <view>
+      填写手机号和密码，便于登录电脑端后台管理系统。
+    </view>
+    <view class="warning-msg">如需编辑请点击编辑按钮（密码不可见）</view>
+    <view class="section">
+      <input
+        disabled="{{!isEditing}}"
+        @input="handleInput('tel')"
+        type="number"
+        value="{{tel}}"
+        placeholder="手机号" />
+    </view>
+    <view class="section">
+      <input
+        disabled="{{!isEditing}}"        
+        @input="handleInput('password')"
+        value="{{password}}"
+        placeholder="密码" />
+    </view>
+    <view class="section btns">
+      <button
+        @tap="edit"
+        type="default">
+        编辑
+      </button>
+      <button
+        @tap="submit"      
+        type="primary">
+        提交
+      </button>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { wx_showToast } from '@/wx-sdk';
+import { AV } from '@/storage';
+
+export default class Account extends wepy.page {
+  onLoad() {
+    let user = AV.User.current();
+    this.tel = user.get('mobilePhoneNumber');
+  }
+
+  data = {
+    isEditing: false,
+    tel: '',
+    password: ''
+  };
+
+  methods = {
+    handleInput (key, e) {
+      this[key] = e.detail.value;
+    },
+    edit () {
+      this.isEditing = true;
+    },
+    submit () {
+      if (!this.tel || !this.password) {
+        wx_showToast({
+          title: '手机号或密码不能为空'
+        });
+        return;
+      }
+      let that = this;
+      wx.showModal({
+        title: '提示',
+        content: '确认提交当前手机号和密码吗？',
+        success: function (res) {
+          if (res.confirm) {
+            let user = AV.User.current();
+            user.set('mobilePhoneNumber', that.tel);
+            user.set('password', that.password);
+            user.save().then(() => {
+              wx_showToast({
+                title: '更新成功'
+              });
+              wx.navigateTo({
+                url: '/pages/personal'
+              });
+            });
+          }
+        }
+      });
+    }
+  }
+}
+</script>
