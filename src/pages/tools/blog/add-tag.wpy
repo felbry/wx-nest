@@ -1,0 +1,26 @@
+<style lang="less">
+  .add-tag-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+</style>
+<template>
+  <view class="add-tag-container">
+    add-tag.
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { AV } from '@/storage';
+
+export default class AddTag extends wepy.page {
+  onLoad() {
+    
+  }
+
+  data = {
+    list: []
+  };
+}
+</script>

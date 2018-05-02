@@ -1,0 +1,26 @@
+<style lang="less">
+  .category-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+</style>
+<template>
+  <view class="category-container">
+    category.
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { AV } from '@/storage';
+
+export default class Category extends wepy.page {
+  onLoad() {
+    
+  }
+
+  data = {
+    list: []
+  };
+}
+</script>
