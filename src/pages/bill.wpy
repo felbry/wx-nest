@@ -24,14 +24,15 @@
 
 <script>
 import wepy from 'wepy';
-import { AV } from '@/storage';
+import { Get_Artical } from '@/api';
 
 export default class Bill extends wepy.page {
   onLoad() {
-    new AV.Query('Artical').find().then(results => {
-      this.list = results;
-      this.$apply();
-    });
+    Get_Artical()
+      .then(results => {
+        this.list = results;
+        this.$apply();
+      });
   }
 
   data = {
