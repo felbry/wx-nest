@@ -3,10 +3,31 @@
     display: flex;
     flex-wrap: wrap;
   }
+
+  .input {
+    width: 100%;
+    padding: 5px;
+    margin: 8px 0;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+  }
+
+  .button {
+    width: 100%;
+  }
 </style>
 <template>
   <view class="add-tag-container">
-    add-tag.
+    <input
+      @input="handleInput"
+      class="input"
+      placeholder="输入标签名称" />
+    <button
+      @tap="submit"
+      size="mini"
+      class="button">
+      提交
+    </button>
   </view>
 </template>
 
@@ -20,7 +41,17 @@ export default class AddTag extends wepy.page {
   }
 
   data = {
-    list: []
+    list: [],
+    labelName: ''
+  };
+
+  methods = {
+    submit () {
+
+    },
+    handleInput (e) {
+      this.labelName = e.detail.value;
+    }
   };
 }
 </script>
