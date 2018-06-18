@@ -21,12 +21,21 @@
 </style>
 <template>
   <view class="personal-container">
-    <image
-      style="width: 150px; height: 150px; border-radius: 150px;"
-      mode="aspectFit"
-      src="{{user.avatarUrl}}">
-    </image>
-    <view style="margin-top: 15px;">{{user.nickName}}</view>
+    <view wx:if="{{isLogin}}">
+      <image
+        style="width: 150px; height: 150px; border-radius: 150px;"
+        mode="aspectFit"
+        src="{{user.avatarUrl}}">
+      </image>
+      <view style="margin-top: 15px; text-align: center;">{{user.nickName}}</view>
+    </view>
+    <button
+      style="margin-top: 30px;"
+      wx:else
+      open-type="getUserInfo"
+      @getuserinfo="bindGetUserInfo">
+      登录
+    </button>
     <view class="operation-panel">
       <navigator url="/pages/personal/account">绑定账号</navigator>
       <navigator url="/pages/tools/blog">博客管理</navigator>
@@ -40,21 +49,35 @@ import { AV } from '@/storage';
 
 export default class Personal extends wepy.page {
   onLoad () {
-    let that = this;
     AV.User.loginWithWeapp().then(user => {
-      wx.getUserInfo({
-        success: function (res) {
-          user.set(res.userInfo).save().then(() => {
-            that.user = AV.User.current();
-            that.$apply();
-          });
-        }
-      });
+      user = user.toJSON();
+      if (user.avatarUrl) {
+        this.user = user;
+        this.$apply();
+        return;
+      }
+      this.isLogin = false;
     });
   }
 
   data = {
     user: AV.User.current(),
+    isLogin: true
+  };
+
+  methods = {
+    bindGetUserInfo (e) {
+      let userInfo = e.detail.userInfo;
+      AV.User.loginWithWeapp()
+        .then(user => {
+          return user.set(userInfo).save();
+        })
+        .then(() => {
+          this.user = AV.User.current();
+          this.isLogin = true;
+          this.$apply();
+        });
+    }
   };
 }
 </script>

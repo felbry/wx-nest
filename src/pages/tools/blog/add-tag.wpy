@@ -33,7 +33,8 @@
 
 <script>
 import wepy from 'wepy';
-import { AV } from '@/storage';
+import { Set_Artical_Tag } from '@/api';
+import { wx_showToast } from '@/wx-sdk';
 
 export default class AddTag extends wepy.page {
   onLoad() {
@@ -47,7 +48,22 @@ export default class AddTag extends wepy.page {
 
   methods = {
     submit () {
-
+      if (!this.labelName.length) {
+        wx_showToast({
+          title: '不能为空哦'
+        });
+        return;
+      }
+      Set_Artical_Tag({
+        name: this.labelName
+      })
+        .then(() => {
+          wx_showToast({
+            title: '创建成功'
+          });
+          this.labelName = '';
+          this.$apply();
+        });
     },
     handleInput (e) {
       this.labelName = e.detail.value;
