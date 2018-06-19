@@ -21,6 +21,7 @@
     <input
       @input="handleInput"
       class="input"
+      value="{{labelName}}"
       placeholder="输入标签名称" />
     <button
       @tap="submit"
