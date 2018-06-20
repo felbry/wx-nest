@@ -22,5 +22,9 @@ const WXRequest = (path, params = {}) => {
 
 // 获取文章列表
 export const Get_Artical = () => { return WXRequest('/get/artical'); };
-// 新增标签
-export const Set_Artical_Tag = (opt) => { return WXRequest('/post/artical/tag', opt); };
+// 新增文章标签
+export const Set_Tag = (opt) => { return WXRequest('/post/tag', opt); };
+// 获取所有文章标签
+export const Get_Artical_Tag = () => { return WXRequest('/get/artical/tag'); };
+// 更新文章标签
+export const Update_Artical_Tag = (opt) => { return WXRequest('/post/artical/tag', opt); };

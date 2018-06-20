@@ -3,24 +3,105 @@
     display: flex;
     flex-wrap: wrap;
   }
+
+  picker {
+    width: 100%;
+    margin-bottom: 10px;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+    padding: 8px 5px;
+  }
+
+  .button {
+    width: 100%;
+  }
 </style>
 <template>
   <view class="category-container">
-    category.
+    <picker
+      @change="bindArticalChange"
+      value="{{articalIndex}}"
+      range-key="title"
+      range="{{articalList}}">
+      <view>
+        文章：{{articalList[articalIndex].title}}
+      </view>
+    </picker>
+    <picker
+      @change="bindTagChange"
+      value="{{tagIndex}}"
+      range-key="name"
+      range="{{tagList}}">
+      <view>
+        标签：{{tagList[tagIndex].name}}
+      </view>
+    </picker>
+    <button
+      @tap="submit"
+      size="mini"
+      class="button">
+      提交
+    </button>
   </view>
 </template>
 
 <script>
 import wepy from 'wepy';
-import { AV } from '@/storage';
+import {
+  Get_Artical,
+  Get_Artical_Tag,
+  Update_Artical_Tag
+} from '@/api';
+import { wx_showToast } from '@/wx-sdk';
 
 export default class Category extends wepy.page {
   onLoad() {
-    
+    Get_Artical()
+      .then(data => {
+        this.articalList = data;
+        this.$apply();
+      });
+    Get_Artical_Tag()
+      .then(data => {
+        this.tagList = data;
+        this.$apply();
+      });
   }
 
   data = {
-    list: []
+    articalList: [],
+    tagList: [],
+    articalIndex: -1,
+    tagIndex: -1
+  };
+
+  methods = {
+    bindArticalChange (e) {
+      this.articalIndex = e.detail.value;
+    },
+    bindTagChange (e) {
+      this.tagIndex = e.detail.value;
+    },
+    submit () {
+      if (this.articalIndex < 0 || this.tagIndex < 0) {
+        wx_showToast({
+          title: '文章和标题都是必填项哦'
+        });
+        return;
+      }
+      Update_Artical_Tag({
+        articalId: this.articalList[this.articalIndex].id,
+        tagId: this.tagList[this.tagIndex].id
+      })
+        .then(() => {
+          wx_showToast({
+            title: '更新成功'
+          });
+          this.articalIndex = -1;
+          this.tagIndex = -1;
+          this.$apply();
+        });
+    }
   };
 }
 </script>

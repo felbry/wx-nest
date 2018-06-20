@@ -34,7 +34,7 @@
 
 <script>
 import wepy from 'wepy';
-import { Set_Artical_Tag } from '@/api';
+import { Set_Tag } from '@/api';
 import { wx_showToast } from '@/wx-sdk';
 
 export default class AddTag extends wepy.page {
@@ -55,7 +55,7 @@ export default class AddTag extends wepy.page {
         });
         return;
       }
-      Set_Artical_Tag({
+      Set_Tag({
         name: this.labelName
       })
         .then(() => {
