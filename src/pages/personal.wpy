@@ -39,6 +39,7 @@
     <view class="operation-panel">
       <navigator url="/pages/personal/account">绑定账号</navigator>
       <navigator url="/pages/tools/blog">博客管理</navigator>
+      <navigator url="/pages/tools/blog/photo">上传照片</navigator>
     </view>
   </view>
 </template>
