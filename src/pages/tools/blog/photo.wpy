@@ -10,8 +10,35 @@
     flex-wrap: wrap;
 
     image {
+      position: relative;
       width: 50%;
       height: 120px;
+    }
+  }
+
+  .image-label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+    font-weight: bold;
+    background-color: #333;
+  }
+
+  .image-mask {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(102, 102, 102, 0.7);
+
+    image {
+      width: 60px;
+      height: 60px;
     }
   }
 
@@ -38,8 +65,12 @@
     <view class="imgs">
       <image
         wx:for="{{imgList}}"
-        wx:key="{{item}}"
-        src="{{item}}">
+        wx:key="{{item.path}}"
+        src="{{item.path}}">
+        <view class="image-label">全部</view>
+        <view class="image-mask">
+          <image src="../../../imgs/no-check.png"></image>
+        </view>
       </image>
     </view>
     <view class="fix">
@@ -65,18 +96,26 @@ export default class Photo extends wepy.page {
   }
 
   data = {
-    imgList: []
+    imgList: [],
+    tagList: []
   };
 
   methods = {
     choose () {
+      // 这里弹出框警告，如果继续操作，当前修改不会被保存
       let that = this;
       wx.chooseImage({
         count: 16,
         sizeType: ['original'],
         sourceType: ['album'],
         success: function (res) {
-          that.imgList = res.tempFilePaths;
+          that.imgList = res.tempFilePaths.map(path => {
+            return {
+              path,
+              tid: '',
+              isChecked: false
+            };
+          });
           that.$apply();
         }
       });
