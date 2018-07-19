@@ -28,3 +28,5 @@ export const Set_Tag = (opt) => { return WXRequest('/post/tag', opt); };
 export const Get_Artical_Tag = () => { return WXRequest('/get/artical/tag'); };
 // 更新文章标签
 export const Update_Artical_Tag = (opt) => { return WXRequest('/post/artical/tag', opt); };
+// 获取所有照片标签
+export const Get_Photo_Tag = () => { return WXRequest('/get/photo/tag'); };

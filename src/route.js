@@ -54,5 +54,15 @@ export default {
           code: 0
         };
       });
-  }
+  },
+  '/get/photo/tag': () => {
+    return new AV.Query('PhotoTag')
+      .find()
+      .then(results => {
+        return {
+          code: 0,
+          data: results
+        };
+      });
+  },
 }

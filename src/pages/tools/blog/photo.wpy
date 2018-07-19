@@ -67,8 +67,10 @@
         wx:for="{{imgList}}"
         wx:key="{{item.path}}"
         src="{{item.path}}">
-        <view class="image-label">全部</view>
-        <view class="image-mask">
+        <view class="image-label">{{tagList.filter(v => { item.tid === v.id })[0].name}}</view>
+        <view
+          @tap="toogleCheck(index)"
+          class="image-mask">
           <image src="../../../imgs/no-check.png"></image>
         </view>
       </image>
@@ -87,12 +89,21 @@
 
 <script>
 import wepy from 'wepy';
-import { Set_Tag } from '@/api';
+import { Get_Photo_Tag } from '@/api';
 import { wx_showToast } from '@/wx-sdk';
 
 export default class Photo extends wepy.page {
   onLoad() {
-    
+    Get_Photo_Tag()
+      .then(data => {
+        this.tagList = data.concat([
+          {
+            id: '',
+            name: '全部'
+          }
+        ]);
+        this.$apply();
+      })
   }
 
   data = {
@@ -119,6 +130,9 @@ export default class Photo extends wepy.page {
           that.$apply();
         }
       });
+    },
+    toogleCheck (index) {
+      this.imgList[index].isChecked = !this.imgList[index].isChecked;
     }
   };
 }
