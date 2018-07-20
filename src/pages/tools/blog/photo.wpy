@@ -107,7 +107,18 @@
         <view style="width: 20%;">保存</view>
       </view>
       <view class="operate-item">
-        一键更换标签
+        <radio-group
+          class="radio-group"
+          @change="tagChange">
+          <label
+            class="radio"
+            wx:for="{{tagList}}">
+            <radio
+              value="{{item.name}}"
+              checked="{{item.checked}}"/>
+            {{item.value}}
+          </label>
+        </radio-group>
       </view>
     </view>
   </view>
@@ -123,8 +134,11 @@ export default class Photo extends wepy.page {
     Get_Photo_Tag()
       .then(data => {
         data.unshift({
-            objectId: '',
-            name: '全部'
+          objectId: '',
+          name: '全部'
+        });
+        data.forEach((tag, index) => {
+          tag.isChecked = index === 0;
         });
         this.tagList = data;
         this.$apply();
@@ -161,13 +175,23 @@ export default class Photo extends wepy.page {
       this.imgList[index].isChecked = !this.imgList[index].isChecked;
     },
     batchOperate () {
-      // 取消确认 以免误点
       if (this.isFixExpand) {
-        this.imgList.forEach(img => {
-          img.isChecked = false;
+        let that = this;
+        wx.showModal({
+          title: '提示',
+          content: '确认取消批量操作吗？系统不会保留当前已选择的内容',
+          success: function (res) {
+            if (res.confirm) {
+              that.imgList.forEach(img => {
+                img.isChecked = false;
+              });
+              that.isFixExpand = !that.isFixExpand;
+            }
+          }
         });
+      } else {
+        this.isFixExpand = !this.isFixExpand;
       }
-      this.isFixExpand = !this.isFixExpand;
     }
   };
 }
