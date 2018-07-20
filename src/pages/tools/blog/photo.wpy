@@ -76,11 +76,19 @@
         wx:for="{{imgList}}"
         wx:key="{{item.path}}"
         src="{{item.path}}">
-        <view class="image-label">全部</view>
+        <view class="image-label">{{item.tag.name}}</view>
         <view
-          @tap="toogleCheck(index)"
+          hidden="{{!isFixExpand}}"
+          @tap="toogleCheck({{index}})"
           class="image-mask">
-          <image src="../../../imgs/no-check.png"></image>
+          <image
+            wx:if="{{!item.isChecked}}"
+            src="../../../imgs/no-check.png">
+          </image>
+          <image
+            wx:else
+            src="../../../imgs/checked.png">
+          </image>
         </view>
       </image>
     </view>
@@ -114,12 +122,11 @@ export default class Photo extends wepy.page {
   onLoad() {
     Get_Photo_Tag()
       .then(data => {
-        this.tagList = data.concat([
-          {
-            id: '',
+        data.unshift({
+            objectId: '',
             name: '全部'
-          }
-        ]);
+        });
+        this.tagList = data;
         this.$apply();
       })
   }
@@ -142,7 +149,7 @@ export default class Photo extends wepy.page {
           that.imgList = res.tempFilePaths.map(path => {
             return {
               path,
-              tid: '',
+              tag: that.tagList[0],
               isChecked: false
             };
           });
@@ -154,6 +161,12 @@ export default class Photo extends wepy.page {
       this.imgList[index].isChecked = !this.imgList[index].isChecked;
     },
     batchOperate () {
+      // 取消确认 以免误点
+      if (this.isFixExpand) {
+        this.imgList.forEach(img => {
+          img.isChecked = false;
+        });
+      }
       this.isFixExpand = !this.isFixExpand;
     }
   };

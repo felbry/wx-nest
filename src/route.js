@@ -1,5 +1,9 @@
 import { AV } from '@/storage';
 
+function parseJson (data) {
+  return JSON.parse(JSON.stringify(data));
+}
+
 export default {
   '/get/artical': () => {
     return new AV.Query('Artical')
@@ -61,7 +65,7 @@ export default {
       .then(results => {
         return {
           code: 0,
-          data: results
+          data: parseJson(results)
         };
       });
   },
