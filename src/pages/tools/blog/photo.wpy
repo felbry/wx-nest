@@ -113,7 +113,11 @@
           @tap="batchOperate">
           {{isFixExpand ? '取消' : ''}}批量操作
         </view>
-        <view style="width: 20%;">保存</view>
+        <view
+          @tap="uploadImg"
+          style="width: 20%;">
+          保存
+        </view>
       </view>
       <view class="operate-item">
         <radio-group
@@ -144,6 +148,7 @@
 import wepy from 'wepy';
 import { Get_Photo_Tag } from '@/api';
 import { wx_showToast } from '@/wx-sdk';
+import { AV } from '@/storage';
 
 export default class Photo extends wepy.page {
   onLoad() {
@@ -222,6 +227,26 @@ export default class Photo extends wepy.page {
         }
       });
       this.isFixExpand = false;
+    },
+    uploadImg () {
+      let count = 0;
+      let promises = this.imgList.map(img => {
+        return new AV.File(
+          'wx_upload_img',
+          {
+            blob: {
+              uri: img.path
+            }
+          })
+            .then(file => {
+              console.log(file);
+              console.log(file.url());
+              // 再对file和tag进行存储，成功即算是成功存储一条
+            })
+            .catch(err => {
+
+            });
+      });
     }
   };
 }
