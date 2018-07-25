@@ -19,6 +19,17 @@
   .type-container {
     margin: 18px 0;
   }
+
+  .tag-item-container {
+    width: 100%;
+    padding: 15px;
+    border: 1px dotted red;
+  }
+
+  .tag-item-operate button {
+    margin-top: 8px;
+    margin-right: 5px;
+  }
 </style>
 <template>
   <view class="add-tag-container">
@@ -46,6 +57,18 @@
       class="button">
       提交
     </button>
+    <view style="width: 100%;">
+      {{typeList[tagType].name}} 已有标签
+      <view class="tag-item-container">
+        <view>
+          前端
+        </view>
+        <view class="tag-item-operate">
+          <button size="mini">重命名</button>
+          <button size="mini">删除</button>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 

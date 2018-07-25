@@ -195,6 +195,10 @@ export default class Photo extends wepy.page {
     },
     batchOperate () {
       if (this.isFixExpand) {
+        if (!this.imgList.length) {
+          this.isFixExpand = !this.isFixExpand;
+          return;
+        }
         let that = this;
         wx.showModal({
           title: '提示',
