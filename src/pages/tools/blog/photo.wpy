@@ -229,23 +229,57 @@ export default class Photo extends wepy.page {
       this.isFixExpand = false;
     },
     uploadImg () {
-      let count = 0;
-      let promises = this.imgList.map(img => {
-        return new AV.File(
-          'wx_upload_img',
-          {
-            blob: {
-              uri: img.path
-            }
-          })
-            .then(file => {
-              console.log(file);
-              console.log(file.url());
-              // 再对file和tag进行存储，成功即算是成功存储一条
-            })
-            .catch(err => {
-
+      if (!this.imgList.length) {
+        wx_showToast({ title: '请先选择照片' });
+        return;
+      }
+      let that = this;
+      wx.showModal({
+        title: '提示',
+        content: '确认保存吗？',
+        success: function (res) {
+          if (res.confirm) {
+            let count = 0;
+            wx.showLoading({
+              mask: true
             });
+            let promises = that.imgList.map(img => {
+              return new AV.File(
+                'wx_upload_img',
+                {
+                  blob: {
+                    uri: img.path
+                  }
+                }).save()
+                  .then(file => {
+                    count++;
+                    let photo = new AV.Object('Photo');
+                    let tempFile = AV.Object.createWithoutData('_File', file.id);
+                    photo.set('file', tempFile);
+                    if (img.tag.objectId) {
+                      let photoTag = AV.Object.createWithoutData('PhotoTag', img.tag.objectId);
+                      photo.set('tag', photoTag);
+                    }
+                    return photo.save()
+                      .then(result => result.id);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+            });
+
+            Promise.all(promises)
+              .then(() => {
+                wx.hideLoading();
+                wx_showToast({ title: `成功${count}条，失败${that.imgList.length - count}条` });
+                setTimeout(() => {
+                  wx.redirectTo({
+                    url: '/pages/tools/blog/photo'
+                  });
+                }, 1500);
+              });
+          }
+        }
       });
     }
   };

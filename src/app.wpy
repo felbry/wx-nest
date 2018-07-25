@@ -15,8 +15,8 @@ import { AV } from '@/storage';
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/tools/blog/photo',
       'pages/personal',
+      'pages/tools/blog/photo',
       'pages/tools/blog/category',
       'pages/tools/blog',
       'pages/tools/blog/add-tag',

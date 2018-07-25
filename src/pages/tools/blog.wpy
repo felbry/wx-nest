@@ -28,6 +28,11 @@
       class="panel">
       博客分类
     </navigator>
+    <navigator
+      url="/pages/personal/account"
+      class="panel">
+      绑定账号
+    </navigator>
   </view>
 </template>
 
