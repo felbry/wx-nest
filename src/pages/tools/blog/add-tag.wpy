@@ -7,13 +7,17 @@
   .input {
     width: 100%;
     padding: 5px;
-    margin: 8px 0;
+    margin: 8px 0 0;
     border-top: 1px solid #333;
     border-bottom: 1px solid #333;
   }
 
   .button {
     width: 100%;
+  }
+
+  .type-container {
+    margin: 18px 0;
   }
 </style>
 <template>
@@ -23,6 +27,19 @@
       class="input"
       value="{{labelName}}"
       placeholder="输入标签名称" />
+    <view class="type-container">
+      <view style="margin-bottom: 5px;">选择标签类型</view>
+      <radio-group @change="tagChange">
+        <label
+          wx:for="{{typeList}}"
+          wx:key="{{item.value}}">
+          <radio
+            value="{{item.value}}"
+            checked="{{tagType == item.value}}" />
+          {{item.name}}
+        </label>
+      </radio-group>
+    </view>
     <button
       @tap="submit"
       size="mini"
@@ -44,31 +61,49 @@ export default class AddTag extends wepy.page {
 
   data = {
     list: [],
-    labelName: ''
+    typeList: [
+      {
+        value: 0,
+        name: '博客'
+      },
+      {
+        value: 1,
+        name: '照片'
+      }
+    ],
+    labelName: '',
+    tagType: 0
   };
 
   methods = {
     submit () {
       if (!this.labelName.length) {
         wx_showToast({
-          title: '不能为空哦'
+          title: '名称不能为空哦'
         });
         return;
       }
       Set_Tag({
-        name: this.labelName
+        name: this.labelName,
+        type: this.tagType
       })
         .then(() => {
           wx_showToast({
             title: '创建成功'
           });
-          this.labelName = '';
-          this.$apply();
+          setTimeout(() => {
+            wx.redirectTo({
+              url: '/pages/tools/blog/add-tag'
+            });
+          }, 1200);
         });
     },
     handleInput (e) {
       this.labelName = e.detail.value;
-    }
+    },
+    tagChange (e) {
+      this.tagType = e.detail.value;
+    },
   };
 }
 </script>

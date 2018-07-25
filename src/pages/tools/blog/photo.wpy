@@ -120,11 +120,8 @@
         </view>
       </view>
       <view class="operate-item">
-        <radio-group
-          class="radio-group"
-          @change="tagChange">
+        <radio-group @change="tagChange">
           <label
-            class="radio"
             wx:for="{{tagList}}"
             wx:key="{{item.name}}">
             <radio

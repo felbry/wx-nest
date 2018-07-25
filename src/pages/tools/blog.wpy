@@ -21,7 +21,7 @@
     <navigator
       url="/pages/tools/blog/add-tag"
       class="panel">
-      新建标签
+      新建标签(博客/照片)
     </navigator>
     <navigator
       url="/pages/tools/blog/category"

@@ -26,7 +26,8 @@ export default {
       });
   },
   '/post/tag': async (opt) => {
-    let query = new AV.Query('Tag');
+    let tagType = ['Tag', 'PhotoTag'];
+    let query = new AV.Query(tagType[opt.type]);
     query.equalTo('name', opt.name);
     let len = await query
       .find()
@@ -39,7 +40,7 @@ export default {
         }
       });
     }
-    let tag = new AV.Object('Tag');
+    let tag = new AV.Object(tagType[opt.type]);
     tag.set('name', opt.name);
     return tag.save()
       .then(() => {

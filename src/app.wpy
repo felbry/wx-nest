@@ -16,10 +16,10 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/personal',
+      'pages/tools/blog/add-tag',
       'pages/tools/blog/photo',
       'pages/tools/blog/category',
       'pages/tools/blog',
-      'pages/tools/blog/add-tag',
       'pages/personal/account',
       'pages/bill',
     ],
